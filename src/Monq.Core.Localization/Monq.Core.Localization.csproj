@@ -12,7 +12,7 @@
     <PackageId>Monq.Core.Localization</PackageId>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageTags>aspnet mvc rest microservice library</PackageTags>
+    <PackageTags>aspnet mvc rest microservice localization library</PackageTags>
     <PackageProjectUrl>https://github.com/MONQDL/Monq.Core.Localization</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MONQDL/Monq.Core.Localization</RepositoryUrl>
     <Description>ASP.NET Core library for HTTP request localization.</Description>
