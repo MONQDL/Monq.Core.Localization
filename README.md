@@ -223,6 +223,8 @@ You should have the following structure:
 
 2. Resource files for non-default cultures named by standard: `../Resources/LocalizationResource.en-US.resx`
 
+3. Make resource files public: set the `Access Modifier` when you open .resx file in Visual Studio or set `Custom Tool` property to `PublicResXFileCodeGenerator`.
+
 ```c#
 [HttpPost]
 public ActionResult<MyModel> MyMethod(
