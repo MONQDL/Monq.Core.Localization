@@ -6,7 +6,7 @@ namespace Monq.Core.Localization.Infrastructure
     /// Атрибут локализуемого свойства.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    public class LocalizableAttribute : Attribute
+    public class LocalizablePropertyAttribute : Attribute
     {
     }
 }

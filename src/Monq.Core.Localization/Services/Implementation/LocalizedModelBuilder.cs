@@ -43,7 +43,7 @@ namespace Monq.Core.Localization.Services.Implementation
             var sourceCopy = source.Duplicate(sourceType);
 
             var properties = sourceType.GetProperties()
-                .Where(p => p.GetCustomAttributes(typeof(LocalizableAttribute), false).Any())
+                .Where(p => p.GetCustomAttributes(typeof(LocalizablePropertyAttribute), false).Any())
                 .ToList();
             foreach (var property in properties)
             {
