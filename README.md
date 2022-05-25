@@ -75,7 +75,7 @@ public class LocalizationResource : ILocalizationResource
 builder.Services
     .AddControllers()
     // For data annotation attributes localization.
-    .AddMonqDataAnnotationsLocalization();
+    .AddMonqDataAnnotationsLocalization<LocalizationResource>();
 
 builder.Services.AddResourceLocalization<LocalizationResource>();
 
@@ -133,7 +133,7 @@ public class MyDbContext: LocalizationDbContext
 builder.Services
     .AddControllers()
     // For data annotation attributes localization.
-    .AddMonqDataAnnotationsLocalization();
+    .AddMonqDataAnnotationsLocalization<LocalizationResource>();
 
 builder.Services.AddDbContext<MyDbContext>();
 builder.Services.AddDbContextLocalization<MyDbContext>();
