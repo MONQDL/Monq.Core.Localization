@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Monq.Core.Localization.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 
@@ -30,7 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="app">Конвейер конфигурации приложения.</param>
         /// <param name="options">Настройки локализации.</param>
         /// <returns></returns>
-        public static IApplicationBuilder UseMonqLocalization(this IApplicationBuilder app, RequestLocalizationOptions options)
+        public static IApplicationBuilder UseMonqLocalization(this IApplicationBuilder app, RequestLocalizationOptions? options = null)
         {
             app.UseRequestLocalization(options ?? _defaultOptions);
             return app;

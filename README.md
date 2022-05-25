@@ -57,6 +57,8 @@ Supported localizable property types:
 - `string`
 - `IEnumerable<string>`
 
+You can also add attributes to properties that are represented as an object or a collection of objects containing localizable properties.
+
 ## Examples
 
 ### Services registration
@@ -73,8 +75,7 @@ public class LocalizationResource : ILocalizationResource
 builder.Services
     .AddControllers()
     // For data annotation attributes localization.
-    .AddDataAnnotationsLocalization(opt => opt.DataAnnotationLocalizerProvider = (type, factory) 
-        => factory.Create(typeof(LocalizationResource)));
+    .AddMonqDataAnnotationsLocalization();
 
 builder.Services.AddResourceLocalization<LocalizationResource>();
 
@@ -132,8 +133,7 @@ public class MyDbContext: LocalizationDbContext
 builder.Services
     .AddControllers()
     // For data annotation attributes localization.
-    .AddDataAnnotationsLocalization(opt => opt.DataAnnotationLocalizerProvider = (type, factory) 
-        => factory.Create(typeof(LocalizationResource)));
+    .AddMonqDataAnnotationsLocalization();
 
 builder.Services.AddDbContext<MyDbContext>();
 builder.Services.AddDbContextLocalization<MyDbContext>();
@@ -204,7 +204,7 @@ public class MyController : ControllerBase
     {
         if (value.Id < 1)
             return BadRequest(_localizer["WrongId"]);
-        
+
         .
         .
         .
@@ -232,7 +232,7 @@ public ActionResult<MyModel> MyMethod(
 {
     if (value.Id < 1)
         return BadRequest(Resources.LocalizationResource.WrongId);
-      
+
     .
     .
     .
