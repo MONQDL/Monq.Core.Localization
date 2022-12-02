@@ -238,3 +238,28 @@ public ActionResult<MyModel> MyMethod(
     .
 }
 ```
+
+### Tests
+
+To set culture for controller unit tests you should use `CultureInfo` static properties.
+
+As an example for xUnit:
+
+```c#
+public class MyTests
+{
+    public MyTests()
+    {
+        CultureInfo.CurrentCulture = new("en-US");
+        CultureInfo.CurrentUICulture = new("en-US");
+    }
+
+    [Fact]
+    public void MyTest()
+    {
+        .
+        .
+        .
+    }
+}
+```
