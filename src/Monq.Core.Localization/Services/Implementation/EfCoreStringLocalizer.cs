@@ -19,6 +19,8 @@ namespace Monq.Core.Localization.Services.Implementation
 
         static readonly TimeSpan _cacheExpiresAfter = TimeSpan.FromMinutes(5);
 
+        string CultureResourcesKey => CultureInfo.CurrentCulture.Name + "-resources";
+
         /// <summary>
         /// Конструктор сервиса локализации запросов на основе <see cref="IStringLocalizer"/>.
         /// Создаёт новый экземпляр <see cref="EfCoreStringLocalizer"/>.
@@ -41,18 +43,12 @@ namespace Monq.Core.Localization.Services.Implementation
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             var cultureName = CultureInfo.CurrentCulture.Name;
-            var key = $"{cultureName}:{nameof(GetAllStrings)}";
-            var result = _cache.GetOrCreate(key, cache =>
+            var result = _cache.GetOrCreate(CultureResourcesKey, cache =>
             {
                 cache.AbsoluteExpirationRelativeToNow = _cacheExpiresAfter;
-                var resources = _context.Resources
-                    .AsNoTracking()
-                    .Where(x => x.LangId == cultureName)
-                    .ToListAsync();
-
-                return resources.Result.Select(x => new LocalizedString(x.Key, x.Value ?? string.Empty)).ToList();
+                return GetAllResources(cultureName);
             });
-            return result;
+            return result.Select(x => x.Value);
         }
 
         /// <inheritdoc/>
@@ -65,23 +61,24 @@ namespace Monq.Core.Localization.Services.Implementation
         string? GetString(string name)
         {
             var cultureName = CultureInfo.CurrentCulture.Name;
-            var key = $"{cultureName}:{nameof(GetString)}:{name}";
-            var result = _cache.GetOrCreate(key, cache =>
+            var result = _cache.GetOrCreate(CultureResourcesKey, cache =>
             {
                 cache.AbsoluteExpirationRelativeToNow = _cacheExpiresAfter;
-                try
-                {
-                    return _context.Resources
-                         .AsNoTracking()
-                         .FirstOrDefault(x => x.LangId == cultureName && x.Key == name)
-                         ?.Value;
-                }
-                catch
-                {
-                    return null;
-                }
+                return GetAllResources(cultureName);
             });
-            return result;
+            return result.TryGetValue(name, out var value) ? value.Value : null;
+        }
+
+        Dictionary<string, LocalizedString> GetAllResources(string cultureName)
+        {
+            var resources = _context.Resources
+                                .AsNoTracking()
+                                .Where(x => x.LangId == cultureName)
+                                .ToList();
+
+            return resources
+                .Select(x => new LocalizedString(x.Key, x.Value ?? string.Empty))
+                .ToDictionary(x => x.Name);
         }
 
         LocalizedString Get(string name)
@@ -90,6 +87,6 @@ namespace Monq.Core.Localization.Services.Implementation
             return result is null ? Fallback(name) : new LocalizedString(name, result);
         }
 
-        static LocalizedString Fallback(string name) => new(name, $"[{CultureInfo.CurrentCulture.Name}:{name}]", true);
+        static LocalizedString Fallback(string name) => new(name, name, true);
     }
 }
